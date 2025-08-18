@@ -10,7 +10,7 @@ const TraineeCard = ({ trainee, onClick }) => {
       <div className="p-6">
         <div className="flex items-start space-x-4">
           {/* Avatar */}
-          <div className="h-12 w-12 flex items-center justify-center rounded-full bg-blue-500 text-white font-semibold">
+          <div className="h-12 w-12 flex items-center justify-center rounded-full bg-green-400 text-white font-semibold">
             {trainee.name
               .split(" ")
               .map((n) => n[0])
@@ -26,7 +26,7 @@ const TraineeCard = ({ trainee, onClick }) => {
 
             {/* Batch & Domain */}
             <div className="flex items-center gap-2">
-              <GraduationCap className="h-4 w-4 text-blue-500" />
+              <GraduationCap className="h-4 w-4 text-orange-400" />
               <span className="px-2 py-0.5 border rounded text-xs">
                 {trainee.batch}
               </span>
@@ -39,7 +39,7 @@ const TraineeCard = ({ trainee, onClick }) => {
               {/* Tasks */}
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1">
-                  <Target className="h-3 w-3 text-blue-500" />
+                  <Target className="h-3 w-3 text-green-400" />
                   <span className="text-xs font-medium">
                     {trainee.assignedTasks}
                   </span>

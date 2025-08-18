@@ -1,17 +1,26 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import {
+  FiArrowLeft,
+  FiCalendar,
+  FiCheckCircle,
+  FiClock,
+  FiXCircle,
+  FiAward,
+  FiBookOpen
+} from "react-icons/fi";
 
-// Replace icons with simple emojis or text placeholders
 const icons = {
-  ArrowLeft: "←",
-  Calendar: "📅",
-  CheckCircle: "✔️",
-  Clock: "⏰",
-  XCircle: "❌",
-  Trophy: "🏆",
-  BookOpen: "📖"
+  ArrowLeft: <FiArrowLeft />,
+  Calendar: <FiCalendar />,
+  CheckCircle: <FiCheckCircle />,
+  Clock: <FiClock />,
+  XCircle: <FiXCircle />,
+  Trophy: <FiAward />,
+  BookOpen: <FiBookOpen />
 };
 
+// --- your traineesData array here ---
 const traineesData = [
   {
     name: "Alice Brown",
@@ -25,7 +34,8 @@ const traineesData = [
     tasks: [
       {
         title: "Build REST API with Flask",
-        description: "Create a complete REST API using Flask framework with authentication",
+        description:
+          "Create a complete REST API using Flask framework with authentication",
         status: "completed",
         dueDate: "2024-08-15",
         score: 95
@@ -76,43 +86,179 @@ const traineesData = [
       { date: "2024-08-11", title: "Testing Strategies", status: "absent" }
     ]
   },
-  // ... other trainees (Bob, Carol) same as your data
+  {
+    name: "Bob Green",
+    empId: "T202",
+    batch: "Java-02",
+    email: "bob@company.com",
+    phone: "4445556666",
+    domain: "Java Development",
+    assignedBatch: "Java-02",
+    assignedTasks: 4,
+    performance: 80,
+    tasks: [
+      {
+        title: "Spring Boot Application",
+        description: "Build a microservice using Spring Boot with JPA",
+        status: "completed",
+        dueDate: "2024-08-14",
+        score: 82
+      },
+      {
+        title: "Database Design",
+        description: "Design and implement relational database schema",
+        status: "completed",
+        dueDate: "2024-08-16",
+        score: 78
+      },
+      {
+        title: "Unit Testing with JUnit",
+        description: "Write comprehensive unit tests for the application",
+        status: "in-progress",
+        dueDate: "2024-08-22",
+        score: null
+      }
+    ],
+    assessments: [
+      {
+        title: "Java Fundamentals",
+        type: "Technical Assessment",
+        date: "2024-08-08",
+        score: 85,
+        maxScore: 100
+      },
+      {
+        title: "Spring Framework",
+        type: "Practical Assessment",
+        date: "2024-08-11",
+        score: 75,
+        maxScore: 100
+      }
+    ],
+    meetingAttendance: {
+      totalMeetings: 12,
+      attended: 10,
+      late: 1,
+      absent: 2,
+      attendancePercentage: 83
+    },
+    recentMeetings: [
+      { date: "2024-08-15", title: "Spring Security", status: "attended" },
+      { date: "2024-08-14", title: "Microservices Architecture", status: "late" },
+      { date: "2024-08-13", title: "JPA Advanced", status: "attended" },
+      { date: "2024-08-12", title: "REST API Best Practices", status: "absent" },
+      { date: "2024-08-11", title: "Testing with JUnit", status: "attended" }
+    ]
+  },
+  {
+    name: "Carol White",
+    empId: "T203",
+    batch: "React-03",
+    email: "carol@company.com",
+    phone: "7778889999",
+    domain: "Frontend Development",
+    assignedBatch: "React-03",
+    assignedTasks: 6,
+    performance: 94,
+    tasks: [
+      {
+        title: "React Component Library",
+        description: "Build reusable component library with TypeScript",
+        status: "completed",
+        dueDate: "2024-08-13",
+        score: 98
+      },
+      {
+        title: "State Management with Redux",
+        description: "Implement Redux for complex state management",
+        status: "completed",
+        dueDate: "2024-08-17",
+        score: 92
+      },
+      {
+        title: "Performance Optimization",
+        description: "Optimize React app performance using best practices",
+        status: "in-progress",
+        dueDate: "2024-08-23",
+        score: null
+      }
+    ],
+    assessments: [
+      {
+        title: "React Fundamentals",
+        type: "Technical Assessment",
+        date: "2024-08-09",
+        score: 96,
+        maxScore: 100
+      },
+      {
+        title: "TypeScript Advanced",
+        type: "Practical Assessment",
+        date: "2024-08-13",
+        score: 94,
+        maxScore: 100
+      }
+    ],
+    meetingAttendance: {
+      totalMeetings: 18,
+      attended: 17,
+      late: 1,
+      absent: 0,
+      attendancePercentage: 94
+    },
+    recentMeetings: [
+      { date: "2024-08-15", title: "React Performance", status: "attended" },
+      { date: "2024-08-14", title: "Advanced Hooks", status: "attended" },
+      { date: "2024-08-13", title: "TypeScript Integration", status: "attended" },
+      { date: "2024-08-12", title: "Component Design", status: "attended" },
+      { date: "2024-08-11", title: "State Management", status: "late" }
+    ]
+  }
 ];
-
 function getStatusColor(status) {
   switch (status) {
-    case "completed": return "#4caf50"; // green
-    case "in-progress": return "#ff9800"; // orange
-    case "pending": return "#9e9e9e"; // grey
-    case "attended": return "#4caf50"; // green
-    case "late": return "#ff9800"; // orange
-    case "absent": return "#f44336"; // red
-    default: return "#9e9e9e";
+    case "completed":
+      return "bg-green-500";
+    case "in-progress":
+      return "bg-orange-500";
+    case "pending":
+      return "bg-gray-500";
+    case "attended":
+      return "bg-green-500";
+    case "late":
+      return "bg-orange-500";
+    case "absent":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
   }
 }
 
 function getStatusIcon(status) {
   switch (status) {
     case "completed":
-    case "attended": return icons.CheckCircle;
+    case "attended":
+      return icons.CheckCircle;
     case "in-progress":
-    case "late": return icons.Clock;
-    case "absent": return icons.XCircle;
-    default: return icons.Clock;
+    case "late":
+      return icons.Clock;
+    case "absent":
+      return icons.XCircle;
+    default:
+      return icons.Clock;
   }
 }
 
 const TraineeDetails = () => {
   const { empId } = useParams();
-  const trainee = traineesData.find(t => t.empId === empId);
-
+  const trainee = traineesData.find((t) => t.empId === empId);
   const [activeTab, setActiveTab] = useState("overview");
 
   if (!trainee) {
     return (
-      <div style={{ minHeight: "100vh", padding: 24, textAlign: "center" }}>
-        <h1 style={{ fontSize: 24, fontWeight: "bold" }}>Trainee Not Found</h1>
-        <Link to="/trainees" style={{ color: "blue", textDecoration: "underline", marginTop: 16, display: "inline-block" }}>
+      <div className="min-h-screen p-6 text-center">
+        <h1 className="text-2xl font-bold">Trainee Not Found</h1>
+        <Link to="/trainees" className="text-blue-600 underline mt-4 inline-block">
           Back to Trainees
         </Link>
       </div>
@@ -120,70 +266,71 @@ const TraineeDetails = () => {
   }
 
   return (
-    <div style={{ minHeight: "100vh", padding: 24, maxWidth: 960, margin: "auto" }}>
+    <div className="min-h-screen p-5 bg-gray-100">
       {/* Back link */}
-      <Link to="/trainees" style={{ textDecoration: "none", color: "#666", display: "inline-flex", alignItems: "center", marginBottom: 20 }}>
-        <span style={{ marginRight: 8 }}>{icons.ArrowLeft}</span> Back to Trainees
+      <Link to="/trainees" className="flex items-center text-gray-600 mb-5">
+        <span className="mr-2 ">{icons.ArrowLeft}</span> Back to Trainees
       </Link>
 
       {/* Header */}
-      <div style={{ textAlign: "center", marginBottom: 24 }}>
-        <h1 style={{ fontSize: 32, fontWeight: "bold" }}>{trainee.name}</h1>
-        <p style={{ color: "#555", fontSize: 18 }}>{trainee.domain} - {trainee.batch}</p>
+      <div className="text-center mb-6">
+        <h1 className="text-3xl font-bold">{trainee.name}</h1>
+        <p className="text-gray-600 text-lg">
+          {trainee.domain} - {trainee.batch}
+        </p>
       </div>
 
       {/* Quick stats */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 16, marginBottom: 32 }}>
-        <div style={{ padding: 16, border: "1px solid #ddd", borderRadius: 8, textAlign: "center" }}>
-          <div style={{ fontSize: 24, fontWeight: "bold", color: "#4caf50" }}>{trainee.meetingAttendance.attendancePercentage}%</div>
-          <div style={{ fontSize: 14, color: "#666" }}>
-            {trainee.meetingAttendance.attended}/{trainee.meetingAttendance.totalMeetings} meetings
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="p-4 border rounded-lg text-center bg-white ">
+          <div className="text-2xl font-bold text-green-500">
+            {trainee.meetingAttendance.attendancePercentage}%
           </div>
-          <div style={{ marginTop: 8, fontWeight: "600" }}>Meeting Attendance</div>
+          <div className="text-sm text-gray-600">
+            {trainee.meetingAttendance.attended}/
+            {trainee.meetingAttendance.totalMeetings} meetings
+          </div>
+          <div className="mt-2 font-semibold">Meeting Attendance</div>
         </div>
-        <div style={{ padding: 16, border: "1px solid #ddd", borderRadius: 8, textAlign: "center" }}>
-          <div style={{ fontSize: 24, fontWeight: "bold", color: "#ff9800" }}>{trainee.performance}%</div>
-          <div style={{ fontSize: 14, color: "#666" }}>Overall Performance</div>
+        <div className="p-4 border rounded-lg text-center bg-white ">
+          <div className="text-2xl font-bold text-orange-500">{trainee.performance}%</div>
+          <div className="text-sm text-gray-600">Overall Performance</div>
         </div>
-        <div style={{ padding: 16, border: "1px solid #ddd", borderRadius: 8, textAlign: "center" }}>
-          <div style={{ fontSize: 24, fontWeight: "bold", color: "#3f51b5" }}>{trainee.assignedTasks}</div>
-          <div style={{ fontSize: 14, color: "#666" }}>Assigned Tasks</div>
+        <div className="p-4 border rounded-lg text-center bg-white ">
+          <div className="text-2xl font-bold text-indigo-600">{trainee.assignedTasks}</div>
+          <div className="text-sm text-gray-600">Assigned Tasks</div>
         </div>
-        <div style={{ padding: 16, border: "1px solid #ddd", borderRadius: 8, textAlign: "center" }}>
-          <div style={{ fontSize: 24, fontWeight: "bold", color: "#9c27b0" }}>{trainee.assessments.length}</div>
-          <div style={{ fontSize: 14, color: "#666" }}>Assessments Completed</div>
+        <div className="p-4 border rounded-lg text-center bg-white ">
+          <div className="text-2xl font-bold text-purple-600">
+            {trainee.assessments.length}
+          </div>
+          <div className="text-sm text-gray-600">Assessments Completed</div>
         </div>
       </div>
 
       {/* Tabs */}
       <div>
-        <div style={{ display: "flex", borderBottom: "1px solid #ccc", marginBottom: 24 }}>
-          {["overview", "tasks", "assessments", "meetings"].map(tab => (
+        <div className="flex bg-gray-200 border-none mb-6">
+          {["overview", "tasks", "assessments", "meetings"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              style={{
-                flex: 1,
-                padding: "12px 0",
-                cursor: "pointer",
-                background: activeTab === tab ? "#3f51b5" : "transparent",
-                color: activeTab === tab ? "white" : "#333",
-                border: "none",
-                borderBottom: activeTab === tab ? "3px solid #303f9f" : "3px solid transparent",
-                fontWeight: activeTab === tab ? "600" : "normal"
-              }}
+              className={`flex-1 py-3 capitalize ${
+                activeTab === tab
+                  ? "bg-white text-black font-semibold border-none rounded-xl m-1"
+                  : "text-gray-800"
+              }`}
             >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {tab}
             </button>
           ))}
         </div>
 
-        {/* Tab content */}
+        {/* Overview */}
         {activeTab === "overview" && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-            {/* Personal Info */}
-            <section style={{ border: "1px solid #ddd", padding: 16, borderRadius: 8 }}>
-              <h2 style={{ marginBottom: 12 }}>Personal Information</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <section className="border p-4 rounded-lg">
+              <h2 className="mb-3 font-semibold">Personal Information</h2>
               <p><strong>Employee ID:</strong> {trainee.empId}</p>
               <p><strong>Email:</strong> {trainee.email}</p>
               <p><strong>Phone:</strong> {trainee.phone}</p>
@@ -191,96 +338,82 @@ const TraineeDetails = () => {
               <p><strong>Batch:</strong> {trainee.batch}</p>
             </section>
 
-            {/* Performance Summary */}
-            <section style={{ border: "1px solid #ddd", padding: 16, borderRadius: 8 }}>
-              <h2 style={{ marginBottom: 12 }}>Performance Summary</h2>
-              <div>
-                <label style={{ display: "block", marginBottom: 4 }}>Overall Performance: {trainee.performance}%</label>
-                <div style={{ background: "#eee", borderRadius: 4, height: 12, marginBottom: 16 }}>
-                  <div
-                    style={{
-                      width: `${trainee.performance}%`,
-                      height: "100%",
-                      backgroundColor: "#ff9800",
-                      borderRadius: 4,
-                      transition: "width 0.3s ease"
-                    }}
-                  />
-                </div>
+            <section className="border p-4 rounded-lg">
+              <h2 className="mb-3 font-semibold">Performance Summary</h2>
+              <label className="block mb-1">
+                Overall Performance: {trainee.performance}%
+              </label>
+              <div className="w-full bg-gray-200 rounded h-3 mb-4">
+                <div
+                  className="h-3 bg-orange-500 rounded"
+                  style={{ width: `${trainee.performance}%` }}
+                />
               </div>
-              <div>
-                <label style={{ display: "block", marginBottom: 4 }}>Meeting Attendance: {trainee.meetingAttendance.attendancePercentage}%</label>
-                <div style={{ background: "#eee", borderRadius: 4, height: 12 }}>
-                  <div
-                    style={{
-                      width: `${trainee.meetingAttendance.attendancePercentage}%`,
-                      height: "100%",
-                      backgroundColor: "#4caf50",
-                      borderRadius: 4,
-                      transition: "width 0.3s ease"
-                    }}
-                  />
-                </div>
+              <label className="block mb-1">
+                Meeting Attendance: {trainee.meetingAttendance.attendancePercentage}%
+              </label>
+              <div className="w-full bg-gray-200 rounded h-3">
+                <div
+                  className="h-3 bg-green-500 rounded"
+                  style={{ width: `${trainee.meetingAttendance.attendancePercentage}%` }}
+                />
               </div>
             </section>
           </div>
         )}
 
+        {/* Tasks */}
         {activeTab === "tasks" && (
           <div>
             {trainee.tasks.map((task, i) => (
-              <div key={i} style={{ border: "1px solid #ddd", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <div key={i} className="border rounded-lg p-4 mb-4">
+                <div className="flex justify-between items-center mb-2">
                   <div>
-                    <h3 style={{ margin: 0 }}>{task.title}</h3>
-                    <p style={{ margin: 0, color: "#666" }}>{task.description}</p>
+                    <h3 className="m-0">{task.title}</h3>
+                    <p className="text-gray-600 m-0">{task.description}</p>
                   </div>
                   <span
-                    style={{
-                      backgroundColor: getStatusColor(task.status),
-                      color: "white",
-                      padding: "4px 8px",
-                      borderRadius: 12,
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 4,
-                      fontSize: 12,
-                      textTransform: "capitalize",
-                      fontWeight: "600"
-                    }}
+                    className={`${getStatusColor(task.status)} text-white px-2 py-1 rounded-full flex items-center gap-1 text-xs font-semibold capitalize`}
                   >
                     {getStatusIcon(task.status)} {task.status.replace("-", " ")}
                   </span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#666" }}>
+                <div className="flex justify-between text-xs text-gray-600">
                   <div>Due: {task.dueDate}</div>
-                  {task.score != null && <div style={{ color: "#4caf50", fontWeight: "600" }}>Score: {task.score}%</div>}
+                  {task.score != null && (
+                    <div className="text-green-500 font-semibold">
+                      Score: {task.score}%
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         )}
 
+        {/* Assessments */}
         {activeTab === "assessments" && (
           <div>
             {trainee.assessments.map((assessment, i) => {
-              const percent = Math.round((assessment.score / assessment.maxScore) * 100);
+              const percent = Math.round(
+                (assessment.score / assessment.maxScore) * 100
+              );
               return (
-                <div key={i} style={{ border: "1px solid #ddd", borderRadius: 8, padding: 16, marginBottom: 16 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                <div key={i} className="border rounded-lg p-4 mb-4">
+                  <div className="flex justify-between items-center mb-2">
                     <div>
-                      <h3 style={{ margin: 0 }}>{assessment.title}</h3>
-                      <p style={{ margin: 0, color: "#666" }}>{assessment.type}</p>
+                      <h3 className="m-0">{assessment.title}</h3>
+                      <p className="text-gray-600 m-0">{assessment.type}</p>
                     </div>
-                    <div style={{ textAlign: "right" }}>
-                      <div style={{ fontSize: 18, fontWeight: "bold", color: "#4caf50" }}>
+                    <div className="text-right">
+                      <div className="text-lg font-bold text-green-500">
                         {assessment.score}/{assessment.maxScore}
                       </div>
-                      <div style={{ fontSize: 12, color: "#666" }}>{percent}%</div>
+                      <div className="text-xs text-gray-600">{percent}%</div>
                     </div>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", fontSize: 12, color: "#666", gap: 4 }}>
-                    <span>{icons.Calendar}</span>
+                  <div className="flex items-center text-xs text-gray-600 gap-1">
+                    {icons.Calendar}
                     <span>Completed on {assessment.date}</span>
                   </div>
                 </div>
@@ -289,47 +422,55 @@ const TraineeDetails = () => {
           </div>
         )}
 
+        {/* Meetings */}
         {activeTab === "meetings" && (
           <div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(120px,1fr))", gap: 16, marginBottom: 32, textAlign: "center" }}>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 text-center">
               <div>
-                <div style={{ fontSize: 24, fontWeight: "bold" }}>{trainee.meetingAttendance.totalMeetings}</div>
-                <div style={{ fontSize: 14, color: "#666" }}>Total Meetings</div>
+                <div className="text-2xl font-bold">
+                  {trainee.meetingAttendance.totalMeetings}
+                </div>
+                <div className="text-sm text-gray-600">Total Meetings</div>
               </div>
               <div>
-                <div style={{ fontSize: 24, fontWeight: "bold", color: "#4caf50" }}>{trainee.meetingAttendance.attended}</div>
-                <div style={{ fontSize: 14, color: "#666" }}>Attended</div>
+                <div className="text-2xl font-bold text-green-500">
+                  {trainee.meetingAttendance.attended}
+                </div>
+                <div className="text-sm text-gray-600">Attended</div>
               </div>
               <div>
-                <div style={{ fontSize: 24, fontWeight: "bold", color: "#ff9800" }}>{trainee.meetingAttendance.late}</div>
-                <div style={{ fontSize: 14, color: "#666" }}>Late</div>
+                <div className="text-2xl font-bold text-orange-500">
+                  {trainee.meetingAttendance.late}
+                </div>
+                <div className="text-sm text-gray-600">Late</div>
               </div>
               <div>
-                <div style={{ fontSize: 24, fontWeight: "bold", color: "#f44336" }}>{trainee.meetingAttendance.absent}</div>
-                <div style={{ fontSize: 14, color: "#666" }}>Absent</div>
+                <div className="text-2xl font-bold text-red-500">
+                  {trainee.meetingAttendance.absent}
+                </div>
+                <div className="text-sm text-gray-600">Absent</div>
               </div>
             </div>
 
             <div>
               {trainee.recentMeetings.map((meeting, i) => (
-                <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid #ddd", padding: 12, borderRadius: 8, marginBottom: 12 }}>
+                <div
+                  key={i}
+                  className="flex justify-between items-center border p-3 rounded-lg mb-3"
+                >
                   <div>
-                    <h4 style={{ margin: 0 }}>{meeting.title}</h4>
-                    <p style={{ margin: 0, color: "#666" }}>{meeting.date}</p>
+                    <h4 className="m-0">{meeting.title}</h4>
+                    <p className="text-gray-600 m-0">{meeting.date}</p>
                   </div>
                   <span
-                    style={{
-                      backgroundColor: getStatusColor(meeting.status),
-                      color: "white",
-                      padding: "4px 8px",
-                      borderRadius: 12,
-                      fontSize: 12,
-                      textTransform: "capitalize",
-                      fontWeight: "600"
-                    }}
+                    className={`${getStatusColor(
+                      meeting.status
+                    )} text-white px-2 py-1 rounded-full text-xs font-semibold capitalize inline-flex items-center gap-1`}
                   >
-                    {getStatusIcon(meeting.status)} {meeting.status}
+                    {getStatusIcon(meeting.status)}
+                    <span>{meeting.status}</span>
                   </span>
+
                 </div>
               ))}
             </div>

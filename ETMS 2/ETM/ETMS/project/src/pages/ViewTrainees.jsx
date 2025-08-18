@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import TraineeCard from "./TraineeCard"; // Local component
+import TraineeCard from "./TraineeCard";
 import { Search, Users, GraduationCap, TrendingUp } from "lucide-react";
 
-// Dummy trainee data
 const traineesData = [
   {
     name: "Alice Brown",
@@ -172,6 +171,7 @@ const traineesData = [
   }
 ];
 
+
 const ViewTrainees = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
@@ -198,88 +198,81 @@ const ViewTrainees = () => {
   );
 
   return (
-    <div style={{ minHeight: "100vh", padding: "20px", background: "#f8f9fa" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+    <div className="min-h-screen p-5 bg-gray-100">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: "20px" }}>
-          <h1 style={{ fontSize: "32px", fontWeight: "bold" }}>Trainee Management System</h1>
-          <p>Monitor progress, track performance, and manage trainee development</p>
+        <div className="text-center mb-5">
+          <h1 className="text-3xl font-bold">Trainee Management System</h1>
+          <p className="text-gray-600">
+            Monitor progress, track performance, and manage trainee development
+          </p>
         </div>
 
         {/* Statistics */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-            gap: "20px",
-            marginBottom: "20px",
-          }}
-        >
-          <div style={cardStyle}>
-            <div style={cardHeaderStyle}>
+        <div className="grid gap-5 grid-cols-[repeat(auto-fit,minmax(250px,1fr))] mb-5">
+          <div className="bg-white rounded-lg p-4 shadow">
+            <div className="flex justify-between font-bold mb-2">
               <span>Total Trainees</span>
               <Users size={18} />
             </div>
-            <div style={cardBodyStyle}>
-              <div style={bigNumberStyle}>{totalTrainees}</div>
+            <div className="text-gray-600">
+              <div className="text-2xl font-bold">{totalTrainees}</div>
               <small>Across all batches</small>
             </div>
           </div>
 
-          <div style={cardStyle}>
-            <div style={cardHeaderStyle}>
+          <div className="bg-white rounded-lg p-4 shadow">
+            <div className="flex justify-between font-bold mb-2">
               <span>Average Attendance</span>
               <GraduationCap size={18} />
             </div>
-            <div style={cardBodyStyle}>
-              <div style={{ ...bigNumberStyle, color: "green" }}>{avgAttendance}%</div>
+            <div className="text-gray-600">
+              <div className="text-2xl font-bold text-green-600">{avgAttendance}%</div>
               <small>Average meeting attendance</small>
             </div>
           </div>
 
-          <div style={cardStyle}>
-            <div style={cardHeaderStyle}>
+          <div className="bg-white rounded-lg p-4 shadow">
+            <div className="flex justify-between font-bold mb-2">
               <span>Average Performance</span>
               <TrendingUp size={18} />
             </div>
-            <div style={cardBodyStyle}>
-              <div style={{ ...bigNumberStyle, color: "orange" }}>{avgPerformance}%</div>
+            <div className="text-gray-600">
+              <div className="text-2xl font-bold text-orange-500">{avgPerformance}%</div>
               <small>Performance score</small>
             </div>
           </div>
         </div>
 
         {/* Filters */}
-        <div style={{ ...cardStyle, marginBottom: "20px", padding: "20px" }}>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "10px",
-            }}
-          >
+        <div className="bg-white rounded-lg shadow p-5 mb-5">
+          <div className="flex flex-wrap gap-3">
             {/* Search */}
-            <div style={{ flex: 1, position: "relative" }}>
-              <Search style={{ position: "absolute", top: "10px", left: "10px" }} size={16} />
+            <div className="flex-1 relative">
+              <Search className="absolute top-2.5 left-3 text-gray-500" size={16} />
               <input
                 type="text"
                 placeholder="Search trainees by name or ID..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "8px 8px 8px 30px",
-                  border: "1px solid #ccc",
-                  borderRadius: "5px",
-                }}
+                className="w-full pl-8 pr-2 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-400"
               />
             </div>
-
+            <select
+              value={filterDomain}
+              onChange={(e) => setFilterDomain(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-400"
+            >
+              <option value="all">All Domains</option>
+              <option value="Python">Python Development</option>
+              <option value="Java">Java Development</option>
+              <option value="Frontend">Frontend Development</option>
+            </select>
             {/* Batch Filter */}
             <select
               value={filterBatch}
               onChange={(e) => setFilterBatch(e.target.value)}
-              style={selectStyle}
+              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-400"
             >
               <option value="all">All Batches</option>
               <option value="Python-01">Python-01</option>
@@ -287,28 +280,12 @@ const ViewTrainees = () => {
               <option value="React-03">React-03</option>
             </select>
 
-            {/* Domain Filter */}
-            <select
-              value={filterDomain}
-              onChange={(e) => setFilterDomain(e.target.value)}
-              style={selectStyle}
-            >
-              <option value="all">All Domains</option>
-              <option value="Python">Python Development</option>
-              <option value="Java">Java Development</option>
-              <option value="Frontend">Frontend Development</option>
-            </select>
+            
           </div>
         </div>
 
         {/* Trainee Cards */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "20px",
-          }}
-        >
+        <div className="grid gap-5 grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
           {filteredTrainees.map((trainee) => (
             <TraineeCard
               key={trainee.empId}
@@ -319,7 +296,7 @@ const ViewTrainees = () => {
         </div>
 
         {filteredTrainees.length === 0 && (
-          <div style={{ textAlign: "center", padding: "40px", color: "#777" }}>
+          <div className="text-center py-10 text-gray-500">
             No trainees found matching your filters.
           </div>
         )}
@@ -328,35 +305,31 @@ const ViewTrainees = () => {
   );
 };
 
-// Inline styles
-const cardStyle = {
-  background: "#fff",
-  borderRadius: "8px",
-  padding: "15px",
-  boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-};
-
-const cardHeaderStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  fontWeight: "bold",
-  marginBottom: "10px",
-};
-
-const cardBodyStyle = {
-  fontSize: "14px",
-  color: "#555",
-};
-
-const bigNumberStyle = {
-  fontSize: "24px",
-  fontWeight: "bold",
-};
-
-const selectStyle = {
-  padding: "8px",
-  border: "1px solid #ccc",
-  borderRadius: "5px",
-};
-
 export default ViewTrainees;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
