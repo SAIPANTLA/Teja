@@ -9,6 +9,7 @@ import BatchManagement from "./pages/BatchManagement";
 import Reports from "./pages/Reports";
 import TraineeDetails from "./pages/TraineeDetails";
 import BatchDetails from "./pages/BatchDetails";
+import Notifications from "./pages/Notifications";
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
               <Route path="/batches" element={<BatchManagement />} />
               <Route path="/batch/:batchId" element={<BatchDetails />} />
               <Route path="/reports" element={<Reports />} />
+              <Route path="/notifications" element={<Notifications />} />
+
             </Routes>
           </main>
         </div>

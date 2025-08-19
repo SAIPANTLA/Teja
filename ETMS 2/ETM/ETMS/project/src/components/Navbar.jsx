@@ -1,13 +1,77 @@
 import React, { useState } from "react";
-import { FiSearch, FiBell, FiUser, FiLogOut, FiSettings } from "react-icons/fi";
+import {
+  FiSearch,
+  FiBell,
+  FiUser,
+  FiLogOut,
+  FiSettings,
+  FiX,
+  FiCheckCircle,
+  FiAlertTriangle,
+  FiInfo,
+} from "react-icons/fi";
 
 const Navbar = () => {
   const [search, setSearch] = useState("");
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [notifications, setNotifications] = useState(3); // Example count
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  // 🔔 ETMS-specific notifications
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      text: "Alice Brown completed 'React Basics' module",
+      time: "5m ago",
+      type: "success",
+    },
+    {
+      id: 2,
+      text: "Training session 'Node.js Advanced' scheduled for tomorrow",
+      time: "1h ago",
+      type: "info",
+    },
+    {
+      id: 3,
+      text: "Server downtime reported during assessment upload",
+      time: "3h ago",
+      type: "warning",
+    },
+    {
+      id: 4,
+      text: "Certification issued for Batch Python-01",
+      time: "Yesterday",
+      type: "success",
+    },
+    {
+      id: 5,
+      text: "Event 'Tech Talk Friday' starts at 4 PM",
+      time: "2d ago",
+      type: "info",
+    },
+  ]);
 
   const handleLogout = () => {
     alert("Logging out...");
+  };
+
+  const clearNotifications = () => {
+    setNotifications([]);
+  };
+
+  // Colors & Icons based on notification type
+  const typeStyles = {
+    success: {
+      style: "border-green-400 bg-green-50 text-green-700",
+      icon: <FiCheckCircle className="text-green-500 mt-1" />,
+    },
+    warning: {
+      style: "border-yellow-400 bg-yellow-50 text-yellow-700",
+      icon: <FiAlertTriangle className="text-yellow-500 mt-1" />,
+    },
+    info: {
+      style: "border-blue-400 bg-blue-50 text-blue-700",
+      icon: <FiInfo className="text-blue-500 mt-1" />,
+    },
   };
 
   return (
@@ -42,13 +106,70 @@ const Navbar = () => {
         </div>
 
         {/* Notification Bell */}
-        <div className="relative cursor-pointer">
-          <FiBell className="text-xl text-gray-500 hover:text-green-600" />
-          {notifications > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
-              {notifications}
-            </span>
+        <div className="relative">
+          <button
+            onClick={() => setShowNotifications((prev) => !prev)}
+            className="relative"
+          >
+            <FiBell className="text-xl text-gray-500 hover:text-green-600" />
+            {notifications.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+                {notifications.length}
+              </span>
+            )}
+          </button>
+
+          {/* Notification Dropdown */}
+          {/* Notification Dropdown */}
+          {showNotifications && (
+            <div className="absolute right-0 mt-2 w-96 bg-white border border-green-200 rounded-xl shadow-2xl overflow-hidden">
+              <div className="flex justify-between items-center px-4 py-3 bg-green-100 border-b">
+                <span className="font-semibold text-green-800 text-sm uppercase tracking-wide">
+                  Notifications
+                </span>
+                <button
+                  onClick={clearNotifications}
+                  className="text-xs text-red-500 hover:text-red-700"
+                >
+                  Clear All
+                </button>
+              </div>
+              {/* 🔽 Removed `max-h-72 overflow-y-auto` */}
+              <div>
+                {notifications.length === 0 ? (
+                  <p className="p-6 text-center text-gray-500 text-sm italic">
+                    🎉 No new notifications
+                  </p>
+                ) : (
+                  notifications.map((note) => (
+                    <div
+                      key={note.id}
+                      className={`flex justify-between items-start px-4 py-3 border-l-4 mb-1 last:mb-0 rounded-md shadow-sm transition hover:scale-[1.02] ${typeStyles[note.type].style}`}
+                    >
+                      <div className="flex items-start gap-2">
+                        {typeStyles[note.type].icon}
+                        <div>
+                          <p className="text-sm font-medium">{note.text}</p>
+                          <span className="text-xs opacity-75">{note.time}</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() =>
+                          setNotifications((prev) =>
+                            prev.filter((n) => n.id !== note.id)
+                          )
+                        }
+                        className="text-gray-400 hover:text-red-500 ml-2"
+                      >
+                        <FiX />
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
           )}
+
         </div>
 
         {/* Profile Menu */}
