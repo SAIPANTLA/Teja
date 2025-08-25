@@ -1,332 +1,292 @@
 import React, { useState } from "react";
 import {
   FiBell,
-  FiCheck,
-  FiX,
-  FiFilter,
-  FiSearch,
-  FiClock,
-  FiUser,
-  FiAlertTriangle,
+  FiCheckCircle,
+  FiAlertCircle,
   FiInfo,
+  FiCalendar,
+  FiMessageSquare,
+  FiFilter,
+  FiCheck,
+  FiTrash2,
+  FiSettings
 } from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Notifications = () => {
-  // ✅ Simple inline toast system (instead of external hook)
-  const [toasts, setToasts] = useState([]);
-
-  const showToast = (title, description) => {
-    const id = Date.now();
-    setToasts((prev) => [...prev, { id, title, description }]);
-
-    // Auto-remove toast after 3s
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 3000);
-  };
-
-  const [filter, setFilter] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
-
+  const [activeFilter, setActiveFilter] = useState("all");
   const [notifications, setNotifications] = useState([
     {
       id: 1,
-      type: "task",
-      title: "New Task Assigned",
-      message: "Python basics assignment has been assigned to Batch Python-01",
-      time: "2 minutes ago",
+      type: "success",
+      title: "Assessment Completed",
+      message: "Alice Brown completed the Java Fundamentals assessment",
+      time: "10 minutes ago",
       read: false,
-      priority: "high",
-      sender: "System",
+      icon: <FiCheckCircle />
     },
     {
       id: 2,
-      type: "attendance",
-      title: "Low Attendance Alert",
-      message: "Bob Green has missed 3 consecutive sessions in Java-02 batch",
-      time: "15 minutes ago",
+      type: "warning",
+      title: "Deadline Approaching",
+      message: "Python for Data Science assignment due in 2 days",
+      time: "25 minutes ago",
       read: false,
-      priority: "medium",
-      sender: "Attendance System",
+      icon: <FiCalendar />
     },
     {
       id: 3,
-      type: "assessment",
-      title: "Assessment Completed",
-      message:
-        "Alice Brown completed React fundamentals assessment with 95% score",
+      type: "info",
+      title: "New Message",
+      message: "You have a new message from John Doe",
       time: "1 hour ago",
       read: true,
-      priority: "low",
-      sender: "Assessment System",
+      icon: <FiMessageSquare />
     },
     {
       id: 4,
-      type: "system",
-      title: "System Maintenance",
-      message: "Scheduled maintenance will begin at 2:00 AM tomorrow",
+      type: "error",
+      title: "Submission Failed",
+      message: "Bob Green's assignment submission failed to upload",
       time: "2 hours ago",
-      read: false,
-      priority: "high",
-      sender: "Admin",
+      read: true,
+      icon: <FiAlertCircle />
     },
     {
       id: 5,
-      type: "batch",
-      title: "New Batch Created",
-      message: "Angular-05 batch has been created with 12 trainees",
-      time: "3 hours ago",
+      type: "success",
+      title: "Training Completed",
+      message: "DevOps Essentials batch completed training",
+      time: "5 hours ago",
       read: true,
-      priority: "low",
-      sender: "Batch Manager",
+      icon: <FiCheckCircle />
     },
     {
       id: 6,
-      type: "performance",
-      title: "Performance Alert",
-      message: "Overall batch performance for Node-04 dropped below 80%",
-      time: "5 hours ago",
-      read: false,
-      priority: "medium",
-      sender: "Performance Monitor",
+      type: "info",
+      title: "System Update",
+      message: "ETMS will be down for maintenance on Saturday",
+      time: "1 day ago",
+      read: true,
+      icon: <FiInfo />
     },
+    {
+      id: 7,
+      type: "warning",
+      title: "Low Attendance",
+      message: "HR Compliance training has low attendance",
+      time: "2 days ago",
+      read: true,
+      icon: <FiAlertCircle />
+    }
   ]);
 
-  const getIcon = (type) => {
-    switch (type) {
-      case "task":
-        return <FiCheck className="text-green-600" />;
-      case "attendance":
-        return <FiUser className="text-yellow-600" />;
-      case "assessment":
-        return <FiBell className="text-blue-600" />;
-      case "system":
-        return <FiAlertTriangle className="text-red-600" />;
-      case "batch":
-        return <FiInfo className="text-purple-600" />;
-      case "performance":
-        return <FiClock className="text-orange-600" />;
-      default:
-        return <FiBell className="text-gray-400" />;
-    }
-  };
+  const filterOptions = [
+    { id: "all", name: "All" },
+    { id: "unread", name: "Unread" },
+    { id: "success", name: "Success" },
+    { id: "warning", name: "Warning" },
+    { id: "error", name: "Error" },
+    { id: "info", name: "Info" }
+  ];
 
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case "high":
-        return "border-red-400 bg-red-50";
-      case "medium":
-        return "border-yellow-400 bg-yellow-50";
-      case "low":
-        return "border-gray-300 bg-gray-50";
+  const getTypeColor = (type) => {
+    switch (type) {
+      case "success":
+        return "bg-emerald-100 text-emerald-700";
+      case "warning":
+        return "bg-amber-100 text-amber-700";
+      case "error":
+        return "bg-rose-100 text-rose-700";
+      case "info":
+        return "bg-blue-100 text-blue-700";
       default:
-        return "border-gray-200 bg-white";
+        return "bg-slate-100 text-slate-700";
     }
   };
 
   const markAsRead = (id) => {
-    setNotifications((prev) =>
-      prev.map((notif) =>
-        notif.id === id ? { ...notif, read: true } : notif
-      )
-    );
-    showToast("Notification marked as read", "The notification has been marked.");
+    setNotifications(notifications.map(notification => 
+      notification.id === id ? { ...notification, read: true } : notification
+    ));
   };
 
   const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((notif) => ({ ...notif, read: true })));
-    showToast("All notifications marked", "All notifications are read now.");
+    setNotifications(notifications.map(notification => ({
+      ...notification,
+      read: true
+    })));
   };
 
   const deleteNotification = (id) => {
-    setNotifications((prev) => prev.filter((notif) => notif.id !== id));
-    showToast("Notification deleted", "The notification has been removed.");
+    setNotifications(notifications.filter(notification => notification.id !== id));
   };
 
-  const filteredNotifications = notifications.filter((notif) => {
-    const matchesFilter =
-      filter === "all" ||
-      (filter === "unread" && !notif.read) ||
-      (filter === "read" && notif.read) ||
-      notif.type === filter;
+  const clearAll = () => {
+    setNotifications([]);
+  };
 
-    const matchesSearch =
-      notif.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      notif.message.toLowerCase().includes(searchTerm.toLowerCase());
-
-    return matchesFilter && matchesSearch;
+  const filteredNotifications = notifications.filter(notification => {
+    if (activeFilter === "all") return true;
+    if (activeFilter === "unread") return !notification.read;
+    return notification.type === activeFilter;
   });
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto relative">
-      {/* Toasts */}
-      <div className="fixed top-4 right-4 space-y-2 z-50">
-        {toasts.map((toast) => (
-          <div
-            key={toast.id}
-            className="bg-white border border-gray-200 shadow-lg rounded-lg p-4 w-72 animate-fade-in"
-          >
-            <h4 className="font-semibold text-gray-800">{toast.title}</h4>
-            <p className="text-sm text-gray-600">{toast.description}</p>
-          </div>
-        ))}
-      </div>
-
+    <div className="p-6 bg-slate-50 min-h-screen">
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              Notifications
-            </h1>
-            <p className="text-gray-500">
-              Stay updated with system alerts and activities
-            </p>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-              {unreadCount} unread
-            </span>
-            <button
-              onClick={markAllAsRead}
-              className="text-green-600 hover:text-green-800 font-medium"
-            >
-              Mark all as read
-            </button>
-          </div>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+            <FiBell className="text-indigo-600" />
+            Notifications
+          </h1>
+          <p className="text-slate-600">
+            {unreadCount > 0 ? `${unreadCount} unread notifications` : "All caught up!"}
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button 
+            className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-slate-200 hover:bg-slate-50"
+            onClick={markAllAsRead}
+            disabled={unreadCount === 0}
+          >
+            <FiCheck size={16} />
+            <span>Mark all as read</span>
+          </button>
+          <button 
+            className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-slate-200 hover:bg-slate-50 text-rose-600 hover:text-rose-700"
+            onClick={clearAll}
+            disabled={notifications.length === 0}
+          >
+            <FiTrash2 size={16} />
+            <span>Clear all</span>
+          </button>
         </div>
       </div>
 
-      {/* Search and Filter */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4 mb-6 shadow-sm">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1 relative">
-            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search notifications..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            />
-          </div>
-
-          <div className="flex items-center gap-2">
-            <FiFilter className="text-gray-400" />
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
+      {/* Filter Bar */}
+      <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200 mb-6">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-slate-700 font-medium">Filter:</span>
+          {filterOptions.map(option => (
+            <button
+              key={option.id}
+              className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-2 ${activeFilter === option.id ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+              onClick={() => setActiveFilter(option.id)}
             >
-              <option value="all">All</option>
-              <option value="unread">Unread</option>
-              <option value="read">Read</option>
-              <option value="task">Tasks</option>
-              <option value="attendance">Attendance</option>
-              <option value="assessment">Assessments</option>
-              <option value="system">System</option>
-              <option value="batch">Batches</option>
-              <option value="performance">Performance</option>
-            </select>
-          </div>
+              {option.id === "unread" && unreadCount > 0 && (
+                <span className="bg-indigo-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {unreadCount}
+                </span>
+              )}
+              {option.name}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Notifications List */}
       <div className="space-y-4">
-        {filteredNotifications.length === 0 ? (
-          <div className="text-center py-12">
-            <FiBell className="mx-auto text-4xl text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-800">
-              No notifications found
-            </h3>
-            <p className="text-gray-500">
-              Try adjusting your search or filter criteria
-            </p>
-          </div>
-        ) : (
-          filteredNotifications.map((notification) => (
-            <div
-              key={notification.id}
-              className={`border rounded-lg p-4 transition-all duration-200 hover:shadow-md ${
-                notification.read
-                  ? "bg-white border-gray-200"
-                  : getPriorityColor(notification.priority)
-              }`}
-            >
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                  {getIcon(notification.type)}
+        <AnimatePresence>
+          {filteredNotifications.length > 0 ? (
+            filteredNotifications.map(notification => (
+              <motion.div
+                key={notification.id}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className={`bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex gap-4 ${!notification.read ? 'border-l-4 border-l-indigo-500' : ''}`}
+              >
+                <div className={`p-3 rounded-full ${getTypeColor(notification.type)}`}>
+                  {notification.icon}
                 </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3
-                        className={`font-medium ${
-                          notification.read
-                            ? "text-gray-500"
-                            : "text-gray-800"
-                        }`}
+                <div className="flex-1">
+                  <div className="flex justify-between items-start">
+                    <h3 className="font-medium text-slate-800">{notification.title}</h3>
+                    <span className="text-sm text-slate-500">{notification.time}</span>
+                  </div>
+                  <p className="text-slate-600 mt-1">{notification.message}</p>
+                  <div className="flex gap-3 mt-3">
+                    {!notification.read && (
+                      <button 
+                        className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+                        onClick={() => markAsRead(notification.id)}
                       >
-                        {notification.title}
-                      </h3>
-                      <p
-                        className={`text-sm mt-1 ${
-                          notification.read
-                            ? "text-gray-400"
-                            : "text-gray-600"
-                        }`}
-                      >
-                        {notification.message}
-                      </p>
-                      <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                        <span className="flex items-center gap-1">
-                          <FiClock />
-                          {notification.time}
-                        </span>
-                        <span>From: {notification.sender}</span>
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            notification.priority === "high"
-                              ? "bg-red-100 text-red-600"
-                              : notification.priority === "medium"
-                              ? "bg-yellow-100 text-yellow-600"
-                              : "bg-gray-200 text-gray-600"
-                          }`}
-                        >
-                          {notification.priority} priority
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 ml-4">
-                      {!notification.read && (
-                        <button
-                          onClick={() => markAsRead(notification.id)}
-                          className="p-2 text-gray-400 hover:text-green-600 transition-colors"
-                          title="Mark as read"
-                        >
-                          <FiCheck />
-                        </button>
-                      )}
-                      <button
-                        onClick={() => deleteNotification(notification.id)}
-                        className="p-2 text-gray-400 hover:text-red-600 transition-colors"
-                        title="Delete notification"
-                      >
-                        <FiX />
+                        <FiCheck size={14} />
+                        Mark as read
                       </button>
-                    </div>
+                    )}
+                    <button 
+                      className="text-sm text-slate-500 hover:text-rose-600 flex items-center gap-1"
+                      onClick={() => deleteNotification(notification.id)}
+                    >
+                      <FiTrash2 size={14} />
+                      Delete
+                    </button>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))
-        )}
+              </motion.div>
+            ))
+          ) : (
+            <motion.div 
+              className="bg-white rounded-xl p-8 text-center shadow-sm border border-slate-200"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <FiBell className="mx-auto text-slate-400 text-4xl mb-4" />
+              <h3 className="text-lg font-medium text-slate-700 mb-2">No notifications</h3>
+              <p className="text-slate-500">
+                {activeFilter === "unread" 
+                  ? "You're all caught up! No unread notifications." 
+                  : "No notifications to display with the current filters."}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
+
+      {/* Notification Preferences
+      <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+        <h2 className="text-lg font-semibold text-slate-800 mb-4">Notification Preferences</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 className="font-medium text-slate-700 mb-3">Notification Types</h3>
+            <div className="space-y-3">
+              {["Training Updates", "Assignment Deadlines", "System Alerts", "Message Notifications", "Progress Reports"].map((type) => (
+                <div key={type} className="flex items-center justify-between">
+                  <span className="text-slate-600">{type}</span>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" className="sr-only peer" defaultChecked />
+                    <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h3 className="font-medium text-slate-700 mb-3">Delivery Methods</h3>
+            <div className="space-y-3">
+              {["In-app notifications", "Email alerts", "Browser notifications", "Mobile push notifications"].map((method) => (
+                <div key={method} className="flex items-center justify-between">
+                  <span className="text-slate-600">{method}</span>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" className="sr-only peer" defaultChecked={method === "In-app notifications"} />
+                    <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                  </label>
+                </div>
+              ))}
+            </div>
+            <button className="mt-6 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+              Save Preferences
+            </button>
+          </div>
+        </div>
+      </div> */}
     </div>
   );
 };

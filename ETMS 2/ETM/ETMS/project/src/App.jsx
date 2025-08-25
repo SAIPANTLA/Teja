@@ -10,6 +10,7 @@ import Reports from "./pages/Reports";
 import TraineeDetails from "./pages/TraineeDetails";
 import BatchDetails from "./pages/BatchDetails";
 import Notifications from "./pages/Notifications";
+import MessagesPage from "./pages/MessagesPage";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               <Route path="/batch/:batchId" element={<BatchDetails />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/notifications" element={<Notifications />} />
+              <Route path="/messages" element={<MessagesPage />} />
 
             </Routes>
           </main>
