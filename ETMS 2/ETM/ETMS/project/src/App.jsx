@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
-import Dashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import EmployeeManagement from "./pages/EmployeeManagement";
 import ViewTrainees from "./pages/ViewTrainees";
 import BatchManagement from "./pages/BatchManagement";
@@ -21,8 +21,8 @@ function App() {
           <Sidebar />
           <main className="flex-1 overflow-y-auto">
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/" element={<AdminDashboard />} />
+              <Route path="/dashboard" element={<AdminDashboard />} />
               <Route path="/employees" element={<EmployeeManagement />} />
               <Route path="/trainees" element={<ViewTrainees />} />
               <Route path="/trainee/:empId" element={<TraineeDetails />} />
