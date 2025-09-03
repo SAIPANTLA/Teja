@@ -83,7 +83,6 @@ const MessagesPage = () => {
         isMe: true
       };
       
-      // Update messages state
       messages[activeConversation].push(newMessage);
       setMessageInput("");
     }

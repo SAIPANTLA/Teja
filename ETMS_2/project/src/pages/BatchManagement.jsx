@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Card from "../components/Card";
-import Modal from "../components/Modal";
-import Toast from "../components/Toast";
+import {
+  FlaskConical,
+  Wrench,
+  BarChart3,
+  Users,
+  FileText,
+  Coffee,
+  Database,
+  Clock,
+} from "lucide-react";
 
 const batchesData = [
   { 
@@ -47,106 +54,18 @@ const batchesData = [
   },
 ];
 
-const domains = ["Python", "Java", "Testing", "DevOps", "Power BI", "HR"];
-
-const trainers = [
-  { id: "T101", name: "John Doe" },
-  { id: "T102", name: "Jane Smith" },
-  { id: "T103", name: "Robert Johnson" },
-  { id: "T104", name: "Sarah Wilson" },
-  { id: "T105", name: "Michael Brown" },
-];
+const domains = ["Python", "Java", "Testing", "DevOps", "Power BI", "SAP"];
 
 const BatchManagement = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [toast, setToast] = useState(null);
   const [selectedDomain, setSelectedDomain] = useState(null);
-  const [batches, setBatches] = useState(batchesData);
-  const [editingBatch, setEditingBatch] = useState(null);
-  const [formData, setFormData] = useState({
-    batchId: "",
-    domain: "",
-    trainees: "",
-    trainers: [],
-    start: "",
-    end: ""
-  });
   const navigate = useNavigate();
 
-  // Filter batches by selected domain
   const filteredBatches = selectedDomain 
-    ? batches.filter(b => b.domain === selectedDomain) 
-    : batches;
+    ? batchesData.filter(b => b.domain === selectedDomain) 
+    : batchesData;
 
   const handleDomainSelect = (domain) => {
     setSelectedDomain(selectedDomain === domain ? null : domain);
-  };
-
-  const handleAddBatch = () => {
-    setEditingBatch(null);
-    setFormData({
-      batchId: "",
-      domain: "",
-      trainees: "",
-      trainers: [],
-      start: "",
-      end: ""
-    });
-    setIsOpen(true);
-  };
-
-  const handleEditBatch = (batch) => {
-    setEditingBatch(batch);
-    setFormData({
-      batchId: batch.batchId,
-      domain: batch.domain,
-      trainees: batch.trainees,
-      trainers: batch.trainers,
-      start: batch.start,
-      end: batch.end
-    });
-    setIsOpen(true);
-  };
-
-  const handleDeleteBatch = (batchId) => {
-    setBatches(batches.filter(b => b.batchId !== batchId));
-    setToast({ message: "Batch removed successfully!", type: "success" });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleTrainerSelect = (e) => {
-    const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-    setFormData(prev => ({ ...prev, trainers: selectedOptions }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (editingBatch) {
-      // Update existing batch
-      setBatches(batches.map(b => 
-        b.batchId === editingBatch.batchId 
-          ? { ...formData, status: editingBatch.status, progress: editingBatch.progress }
-          : b
-      ));
-      setToast({ message: "Batch updated successfully!", type: "success" });
-    } else {
-      // Add new batch
-      const newBatch = {
-        ...formData,
-        trainees: parseInt(formData.trainees),
-        status: "Upcoming",
-        progress: 0
-      };
-      setBatches([...batches, newBatch]);
-      setToast({ message: "Batch added successfully!", type: "success" });
-    }
-    
-    setIsOpen(false);
   };
 
   const getStatusColor = (status) => {
@@ -164,23 +83,33 @@ const BatchManagement = () => {
     return "bg-green-500";
   };
 
+  const renderDomainIcon = (domain) => {
+    const iconStyle = "w-6 h-6 mb-2";
+    
+    switch(domain) {
+      case "Python":
+        return <Database className={`${iconStyle} text-blue-600`} />;
+      case "Java":
+        return <Coffee className={`${iconStyle} text-red-600`} />;
+      case "Testing":
+        return <FlaskConical className={`${iconStyle} text-green-600`} />;
+      case "DevOps":
+        return <Wrench className={`${iconStyle} text-yellow-600`} />;
+      case "Power BI":
+        return <BarChart3 className={`${iconStyle} text-yellow-500`} />;
+      case "HR":
+        return <Users className={`${iconStyle} text-purple-600`} />;
+      default:
+        return <FileText className={`${iconStyle} text-gray-600`} />;
+    }
+  };
+
   return (
     <div className="p-6 min-h-screen" style={{
       background: "linear-gradient(135deg, rgba(240, 249, 255, 0.9) 0%, rgba(224, 242, 254, 0.9) 100%)",
-      backdropFilter: "blur(8px)",
-      WebkitBackdropFilter: "blur(8px)",
     }}>
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-blue-800">Batch Management</h2>
-        <button 
-          className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all flex items-center"
-          onClick={handleAddBatch}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
-          </svg>
-          ADD BATCH
-        </button>
       </div>
 
       {/* Domain Filter Cards */}
@@ -198,17 +127,10 @@ const BatchManagement = () => {
               }`}
             >
               <div className="flex flex-col items-center justify-center">
-                <span className="text-2xl mb-2">
-                  {domain === "Python" && "🐍"}
-                  {domain === "Java" && "☕"}
-                  {domain === "Testing" && "🧪"}
-                  {domain === "DevOps" && "🔧"}
-                  {domain === "Power BI" && "📊"}
-                  {domain === "HR" && "👥"}
-                </span>
+                {renderDomainIcon(domain)}
                 <span className="font-medium text-center">{domain}</span>
                 <span className="text-sm mt-1">
-                  {batches.filter(b => b.domain === domain).length} batches
+                  {batchesData.filter(b => b.domain === domain).length} batches
                 </span>
               </div>
             </div>
@@ -260,15 +182,11 @@ const BatchManagement = () => {
               
               <div className="grid grid-cols-2 gap-3 text-sm mb-4">
                 <div className="flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
+                  <Users className="h-4 w-4 mr-2 text-blue-600" />
                   {batch.trainees} Trainees
                 </div>
                 <div className="flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
+                  <Clock className="h-4 w-4 mr-2 text-blue-600" />
                   {batch.start} to {batch.end}
                 </div>
               </div>
@@ -285,18 +203,6 @@ const BatchManagement = () => {
                 >
                   View
                 </button>
-                <button 
-                  className="flex-1 bg-green-100 text-green-700 px-3 py-1.5 rounded-lg text-sm hover:bg-green-200 transition-colors"
-                  onClick={() => handleEditBatch(batch)}
-                >
-                  Edit
-                </button>
-                <button 
-                  className="flex-1 bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-sm hover:bg-red-200 transition-colors"
-                  onClick={() => handleDeleteBatch(batch.batchId)}
-                >
-                  Remove
-                </button>
               </div>
             </div>
           </div>
@@ -305,9 +211,7 @@ const BatchManagement = () => {
 
       {filteredBatches.length === 0 && (
         <div className="text-center py-12 bg-white rounded-2xl shadow-md">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+          <FileText className="h-16 w-16 mx-auto text-gray-400 mb-4" />
           <h3 className="text-lg font-medium text-gray-700 mb-2">No batches found</h3>
           <p className="text-gray-500">
             {selectedDomain 
@@ -315,124 +219,6 @@ const BatchManagement = () => {
               : "No batches have been created yet"}
           </p>
         </div>
-      )}
-
-      {/* Modal for Add/Edit Batch */}
-      <Modal 
-        isOpen={isOpen} 
-        onClose={() => setIsOpen(false)} 
-        title={editingBatch ? "Edit Batch" : "Add New Batch"}
-        width="max-w-2xl"
-      >
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Batch ID</label>
-              <input 
-                name="batchId"
-                value={formData.batchId}
-                onChange={handleInputChange}
-                placeholder="e.g., PY-01" 
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                required
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Domain</label>
-              <select 
-                name="domain"
-                value={formData.domain}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                required
-              >
-                <option value="">Select Domain</option>
-                {domains.map((d) => (
-                  <option key={d} value={d}>{d}</option>
-                ))}
-              </select>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Number of Trainees</label>
-              <input 
-                type="number"
-                name="trainees"
-                value={formData.trainees}
-                onChange={handleInputChange}
-                placeholder="e.g., 20" 
-                min="1"
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                required
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Trainers</label>
-              <select 
-                multiple
-                value={formData.trainers}
-                onChange={handleTrainerSelect}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 h-32"
-                required
-              >
-                {trainers.map((trainer) => (
-                  <option key={trainer.id} value={trainer.name}>{trainer.name} ({trainer.id})</option>
-                ))}
-              </select>
-              <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple trainers</p>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-              <input 
-                type="date"
-                name="start"
-                value={formData.start}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                required
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
-              <input 
-                type="date"
-                name="end"
-                value={formData.end}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                required
-              />
-            </div>
-          </div>
-          
-          <div className="flex gap-3 pt-4">
-            <button 
-              type="button"
-              className="flex-1 bg-gray-200 text-gray-800 px-4 py-2.5 rounded-lg hover:bg-gray-300 transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit"
-              className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2.5 rounded-lg shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all"
-            >
-              {editingBatch ? "Update Batch" : "Create Batch"}
-            </button>
-          </div>
-        </form>
-      </Modal>
-
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
       )}
     </div>
   );

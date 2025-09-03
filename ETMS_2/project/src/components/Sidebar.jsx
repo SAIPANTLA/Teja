@@ -4,10 +4,10 @@ import { Link, useLocation } from "react-router-dom";
 
 const menuItems = [
   { label: "Dashboard", icon: <FiHome />, path: "/dashboard" },
-  { label: "Employee Management", icon: <FiUsers />, path: "/employees" },
-  { label: "View Trainees", icon: <FiUsers />, path: "/trainees" },
+  { label: "Trainer Management", icon: <FiUsers />, path: "/employees" },
+  { label: "Trainees Management", icon: <FiUsers />, path: "/trainees" },
   { label: "Batch Management", icon: <FiLayers />, path: "/batches" },
-  { label: "Reports", icon: <FiBarChart2 />, path: "/reports" },
+  // { label: "Reports", icon: <FiBarChart2 />, path: "/reports" },
 ];
 
 const Sidebar = () => {
@@ -21,24 +21,21 @@ const Sidebar = () => {
       border-r border-white text-white shadow-md 
       transition-all duration-300 
       ${collapsed ? "w-21" : "w-64"} 
-      flex flex-col z-20  overflow-hidden`} // ✅ relative for watermark
+      flex flex-col z-20  overflow-hidden`} 
     >
     
-      {/* Header */}
       <div className="flex items-center justify-between px-3 py-6  relative z-10">
         <span className={`text-lg text-black font-bold ${collapsed ? "hidden" : "block"}`}>
-          {/* Logo or Title */}
           ETMS Admin Panel
         </span>
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="text-black hover:text-black"
         >
-          <FiMenu />
+         <FiMenu />
         </button>
       </div>
 
-      {/* Menu */}
       <nav className="flex-1 py-4 relative z-10">
         {menuItems.map((item) => (
           <Link

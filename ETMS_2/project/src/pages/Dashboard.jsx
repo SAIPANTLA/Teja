@@ -3,10 +3,8 @@ import {
   FiUsers,
   FiUserCheck,
   FiLayers,
-  FiClipboard,
-  FiMessageCircle,
   FiArrowRight,
-  FiClock
+  FiClock,
 } from "react-icons/fi";
 import { Pie, Line } from "react-chartjs-2";
 import {
@@ -54,20 +52,6 @@ const summary = [
     color: "from-amber-500 to-orange-500",
     link: "/batches",
   },
-  {
-    title: "Pending Tasks",
-    value: 15,
-    icon: <FiClipboard />,
-    color: "from-rose-500 to-pink-600",
-    // link: "/tasks",
-  },
-  {
-    title: "Queries",
-    value: 5,
-    icon: <FiMessageCircle />,
-    color: "from-violet-500 to-purple-600",
-    // link: "/queries",
-  },
 ];
 
 // Line chart data
@@ -111,10 +95,30 @@ const pieData = {
 
 // Recent activity
 const recentActivity = [
-  { name: "Alice Brown", action: "Completed Assessment", status: "success", time: "10 mins ago" },
-  { name: "Bob Green", action: "Submitted Assignment", status: "info", time: "25 mins ago" },
-  { name: "Jane Smith", action: "Batch Started", status: "warning", time: "1 hour ago" },
-  { name: "John Doe", action: "Query Raised", status: "error", time: "2 hours ago" },
+  {
+    name: "Alice Brown",
+    action: "Completed Assessment",
+    status: "success",
+    time: "10 mins ago",
+  },
+  {
+    name: "Bob Green",
+    action: "Submitted Assignment",
+    status: "info",
+    time: "25 mins ago",
+  },
+  {
+    name: "Jane Smith",
+    action: "Batch Started",
+    status: "warning",
+    time: "1 hour ago",
+  },
+  {
+    name: "John Doe",
+    action: "Query Raised",
+    status: "error",
+    time: "2 hours ago",
+  },
 ];
 
 // Status colors
@@ -151,7 +155,6 @@ const Dashboard = () => {
 
   return (
     <div className="p-6 space-y-8 bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
-      
       {/* Hero Section */}
       <motion.div
         className="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl p-6 flex flex-col justify-center items-start 
@@ -161,9 +164,9 @@ const Dashboard = () => {
       >
         <div className="absolute -right-4 -top-4 w-28 h-28 rounded-full bg-white/10"></div>
         <div className="absolute -right-8 -bottom-8 w-36 h-36 rounded-full bg-white/10"></div>
-        
+
         <h1 className="text-3xl font-bold text-white relative z-10">
-          Welcome to ETMS Admin
+          Welcome to Admin
         </h1>
         <p className="text-blue-100 mt-2 flex items-center gap-2 relative z-10">
           <FiClock className="text-sm" /> {dateTime}
@@ -171,7 +174,7 @@ const Dashboard = () => {
       </motion.div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {summary.map((item, idx) => (
           <motion.div
             key={idx}
@@ -182,19 +185,25 @@ const Dashboard = () => {
           >
             <a
               href={item.link}
-              className="block rounded-2xl bg-white/80 backdrop-blur-sm p-5 transition-all duration-300 
-                hover:shadow-xl hover:-translate-y-1 border border-white/30 group-hover:bg-white"
+              className="block rounded-2xl bg-white p-6 transition-all duration-300 
+                hover:shadow-xl hover:-translate-y-2 border border-slate-200 group-hover:bg-slate-50"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-sm font-medium text-slate-500">{item.title}</div>
-                  <div className="text-2xl font-bold text-slate-800 mt-1">{item.value}</div>
+                  <div className="text-sm font-medium text-slate-500">
+                    {item.title}
+                  </div>
+                  <div className="text-3xl font-bold text-slate-800 mt-1">
+                    {item.value}
+                  </div>
                 </div>
-                <div className={`p-3 rounded-xl bg-gradient-to-br ${item.color} text-white text-xl shadow-sm`}>
+                <div
+                  className={`p-4 rounded-xl bg-gradient-to-br ${item.color} text-white text-2xl shadow-md`}
+                >
                   {item.icon}
                 </div>
               </div>
-              <div className="flex items-center text-xs text-slate-400 mt-4 group-hover:text-blue-500 transition-colors">
+              <div className="flex items-center text-sm text-slate-400 mt-5 group-hover:text-blue-500 transition-colors">
                 View details <FiArrowRight className="ml-1" />
               </div>
             </a>
@@ -206,7 +215,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
         {/* Performance Chart */}
         <motion.div
-          className="lg:col-span-4 bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm p-6 border border-white/30"
+          className="lg:col-span-4 bg-white rounded-2xl shadow-sm p-6 border border-slate-200"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
         >
@@ -222,24 +231,24 @@ const Dashboard = () => {
             <Line
               data={lineData}
               options={{
-                plugins: { 
-                  legend: { display: false } 
+                plugins: {
+                  legend: { display: false },
                 },
                 maintainAspectRatio: false,
                 scales: {
                   y: {
                     grid: {
-                      color: 'rgba(0,0,0,0.05)'
+                      color: "rgba(0,0,0,0.05)",
                     },
                     suggestedMin: 70,
-                    suggestedMax: 100
+                    suggestedMax: 100,
                   },
                   x: {
                     grid: {
-                      display: false
-                    }
-                  }
-                }
+                      display: false,
+                    },
+                  },
+                },
               }}
             />
           </div>
@@ -247,7 +256,7 @@ const Dashboard = () => {
 
         {/* Batch Distribution */}
         <motion.div
-          className="lg:col-span-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm p-6 border border-white/30 flex flex-col"
+          className="lg:col-span-3 bg-white rounded-2xl shadow-sm p-6 border border-slate-200 flex flex-col"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
@@ -260,17 +269,17 @@ const Dashboard = () => {
               <Pie
                 data={pieData}
                 options={{
-                  plugins: { 
-                    legend: { 
+                  plugins: {
+                    legend: {
                       position: "bottom",
                       labels: {
                         usePointStyle: true,
-                        padding: 20
-                      }
-                    } 
+                        padding: 20,
+                      },
+                    },
                   },
                   maintainAspectRatio: false,
-                  cutout: '40%'
+                  cutout: "40%",
                 }}
               />
             </div>
@@ -305,7 +314,7 @@ const Dashboard = () => {
         </motion.div>
 
         <motion.div
-          className="lg:col-span-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm p-6 border border-white/30"
+          className="lg:col-span-3 bg-white rounded-2xl shadow-sm p-6 border border-slate-200"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
@@ -314,7 +323,10 @@ const Dashboard = () => {
             <span className="text-lg font-semibold text-slate-800">
               Recent Activity
             </span>
-            <a href="#" className="text-sm text-blue-500 hover:text-blue-700 flex items-center">
+            <a
+              href="#"
+              className="text-sm text-blue-500 hover:text-blue-700 flex items-center"
+            >
               View all <FiArrowRight className="ml-1" />
             </a>
           </div>
@@ -322,7 +334,7 @@ const Dashboard = () => {
             {recentActivity.map((item, idx) => (
               <motion.li
                 key={idx}
-                className="p-3 rounded-xl bg-slate-50/50 hover:bg-slate-100/50 transition-colors"
+                className="p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.1 }}
@@ -347,7 +359,9 @@ const Dashboard = () => {
                     >
                       {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                     </span>
-                    <div className="text-xs text-slate-400 mt-1">{item.time}</div>
+                    <div className="text-xs text-slate-400 mt-1">
+                      {item.time}
+                    </div>
                   </div>
                 </div>
               </motion.li>

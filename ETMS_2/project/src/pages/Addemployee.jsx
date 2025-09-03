@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Modal from "../components/Modal"; // optional
+import Modal from "../components/Modal"; 
 import Toast from "../components/Toast";
 
 export default function AddEmployee({ onAdd, onClose }) {
   const defaultPhoto =
-    "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"; // ✅ Default profile logo
+    "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"; 
 
   const [form, setForm] = useState({
     name: "",

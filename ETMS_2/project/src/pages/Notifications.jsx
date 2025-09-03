@@ -6,7 +6,7 @@ import {
   FiInfo,
   FiCalendar,
   FiMessageSquare,
-  FiFilter,
+  // FiFilter,
   FiCheck,
   FiTrash2,
   FiSettings
@@ -164,10 +164,10 @@ const Notifications = () => {
             <FiTrash2 size={16} />
             <span>Clear all</span>
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-slate-200 hover:bg-slate-50">
+          {/* <button className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-slate-200 hover:bg-slate-50">
             <FiSettings size={16} />
             <span>Settings</span>
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -254,43 +254,7 @@ const Notifications = () => {
         </AnimatePresence>
       </div>
 
-      {/* Notification Preferences */}
-      <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-        <h2 className="text-lg font-semibold text-slate-800 mb-4">Notification Preferences</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <h3 className="font-medium text-slate-700 mb-3">Notification Types</h3>
-            <div className="space-y-3">
-              {["Training Updates", "Assignment Deadlines", "System Alerts", "Message Notifications", "Progress Reports"].map((type) => (
-                <div key={type} className="flex items-center justify-between">
-                  <span className="text-slate-600">{type}</span>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" className="sr-only peer" defaultChecked />
-                    <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h3 className="font-medium text-slate-700 mb-3">Delivery Methods</h3>
-            <div className="space-y-3">
-              {["In-app notifications", "Email alerts", "Browser notifications", "Mobile push notifications"].map((method) => (
-                <div key={method} className="flex items-center justify-between">
-                  <span className="text-slate-600">{method}</span>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" className="sr-only peer" defaultChecked={method === "In-app notifications"} />
-                    <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                  </label>
-                </div>
-              ))}
-            </div>
-            <button className="mt-6 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-              Save Preferences
-            </button>
-          </div>
-        </div>
-      </div>
+      
     </div>
   );
 };
