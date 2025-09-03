@@ -129,7 +129,7 @@ const statusColors = {
   error: "bg-rose-400",
 };
 
-const Dashboard = () => {
+const AdminDashboard = () => {
   const [dateTime, setDateTime] = useState("");
 
   useEffect(() => {
@@ -373,4 +373,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;
